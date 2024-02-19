@@ -1,0 +1,16 @@
+version: '3' #Docker version
+services: #Services of the app
+  backend: #backend service
+    build: #Build this service from...
+      context: ./backend/emailbackend # Directory of the dockerfile for the image
+      dockerfile: Dockerfile.back # Dockerfile name
+    ports:
+      - '8000:8000' #Using the port 8000
+  frontend: #Frontend service
+    build: #Build frontend service from...
+      context: ./frontend/basicemail_front #Directory of the dockerfile for the image
+      dockerfile: Dockerfile.front #Dockerfile name
+    ports:
+      - '3000:3000' #Using the port 3000
+  
+  
