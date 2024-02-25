@@ -17,12 +17,13 @@ export default function InboxView() {
     const { actualEmail, setActualEmail } = useContext(selectedEmailContext);
 
     async function getEmailsEffect() {
-        const data = await getEmails("sergio.franco@swiftmail.com");
+        const data = await getEmails("remitente@example.com");
         setEmails(data.data);
     }
 
     useEffect(() => {
-        //getEmailsEffect();
+        getEmailsEffect();
+        console.log(emails)
     }, []);
 
     return (
@@ -35,7 +36,7 @@ export default function InboxView() {
         p-6 gap-2
         flex'>
             <div className='w-1/3 h-full gap-5 flex flex-col items-center text-white'>
-                {falseEmails.map((actualEmail: any) => {
+                {emails.map((actualEmail: any) => {
                     return (
                         <div className='gap-5 items-center flex flex-col'>
                             <Message {...actualEmail} />

@@ -12,7 +12,7 @@ export default function ComposeView() {
   const onSubmit = handleSubmit(
     async data => {
       try {
-        //await sendEmail(data.subject, data.email, data.body)
+        await sendEmail(data.subject, data.email, data.body)
         alert('Email sent')
         setActualView('Inbox')
       } catch (error) {
