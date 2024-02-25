@@ -81,9 +81,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'basicemail',
         'USER': 'mateo',
-        'PASSWORD': '123456', 
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'PASSWORD': '123456',
+        'HOST': 'host.docker.internal',
+        'PORT': '5432'
     }
 }
 
