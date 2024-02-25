@@ -27,7 +27,7 @@ function SideBar() {
               <InboxIcon/>
               <p className='text-base'>Inbox</p>
             </button>
-            <button onClick={() => setActualView("Compose")} className='gap-2 flex bg-white rounded-lg px-3 items-center'>
+            <button onClick={() => setActualView("Compose")} className='gap-2 flex bg-white rounded-lg px-3 items-center transition hover:bg-[#5858B9] active:bg-[#5858B9]'>
               <ComposeIcon/>
               <p className='text-base'>Compose</p>
             </button>
