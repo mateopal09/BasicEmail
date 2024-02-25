@@ -1,7 +1,16 @@
 import React from 'react'
 import Message from './Message'
+import {getEmails, sendEmail} from '../api'
 
 export default function ComposeView() {
+
+  function sendEmail() {
+    console.log('Sending email...')
+  }
+
+
+
+
   return (
     <section className='
     w-2/3 
@@ -25,7 +34,7 @@ export default function ComposeView() {
             <Message />
         </div>
 
-        <div className='w-2/3 h-full flex flex-col gap-2'>
+        <form  className='w-2/3 h-full flex flex-col gap-2'>
             <input placeholder='Subject...' className='h-[8%] font-semibold bg-white text-xl py-2 px-1 rounded-lg'></input>
 
             <input placeholder='Email...' type='email' className='h-[12%] bg-white text-xl py-2 px-1 rounded-lg gap-2 flex'>
@@ -37,7 +46,7 @@ export default function ComposeView() {
             </input>
 
             <button className='bg-white rounded-md'>Sumbit</button>
-        </div>
+        </form>
     </section>
   )
 }
