@@ -5,8 +5,8 @@ import logo from '../Icons/logo.svg';
 import { ActualViewContext } from '../Contexts/ViewContext';
 
 function SideBar() {
-  
-  const { setActualView } = useContext(ActualViewContext);
+
+  const { actualView, setActualView } = useContext(ActualViewContext);
   
   return (
     <section className='
@@ -23,11 +23,11 @@ function SideBar() {
           </button>
 
           <div className='gap-2 flex flex-col'>
-            <button onClick={() => setActualView("Inbox")} className='gap-2 flex bg-white rounded-lg px-3 items-center'>
+            <button onClick={() => setActualView("Inbox")} className={`gap-2 flex ${actualView === "Inbox" ? 'bg-[#5858B9] text-white' : 'bg-white hover:bg-[#dedede]'} rounded-lg px-3 items-center transition active:bg-[#5858B9]`}>
               <InboxIcon/>
               <p className='text-base'>Inbox</p>
             </button>
-            <button onClick={() => setActualView("Compose")} className='gap-2 flex bg-white rounded-lg px-3 items-center transition hover:bg-[#5858B9] active:bg-[#5858B9]'>
+            <button onClick={() => setActualView("Compose")} className={`gap-2 flex ${actualView === "Compose" ? 'bg-[#5858B9] text-white' : 'bg-white hover:bg-[#dedede]'} rounded-lg px-3 items-center transition active:bg-[#5858B9]`}>
               <ComposeIcon/>
               <p className='text-base'>Compose</p>
             </button>

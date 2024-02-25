@@ -7,4 +7,3 @@ export const getEmails = (curretUser: string) => {
 export const sendEmail = (subject: string, email: string, body: string) => {
     return axios.post('http://localhost:8000/api/send-email/', { subject, email, body });
 }
-
