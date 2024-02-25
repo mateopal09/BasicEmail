@@ -15,3 +15,9 @@ class EmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Emails
         fields = ['recipient_email', 'subject', 'body', 'timestamp']
+
+
+class EmailRecieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Emails
+        fields = ['sender_email', 'subject', 'timestamp']

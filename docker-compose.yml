@@ -20,7 +20,7 @@ services: #Services of the app
       - db
   frontend: #Frontend service
     build: #Build frontend service from...
-      context: ./frontend/basicemail_front #Directory of the dockerfile for the image
+      context: ./frontend #Directory of the dockerfile for the image
       dockerfile: Dockerfile.front #Dockerfile name
     ports:
       - '3000:3000' #Using the port 3000
