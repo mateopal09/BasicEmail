@@ -80,6 +80,7 @@ WSGI_APPLICATION = 'emailbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+'''#LOCAL DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -87,6 +88,18 @@ DATABASES = {
         'USER': 'mateo',
         'PASSWORD': '123456',
         'HOST': 'host.docker.internal',
+        'PORT': '5432'
+    }
+}'''
+
+#AWS DATABASE
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'basicemail',
+        'USER': 'postgres',
+        'PASSWORD': 'basicemail123',
+        'HOST': 'basic-email-db.cpiawy0w4xz1.us-east-2.rds.amazonaws.com',
         'PORT': '5432'
     }
 }
