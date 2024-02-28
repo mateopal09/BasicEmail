@@ -6,7 +6,7 @@ class Emails (models.Model):
 
     Parameters:
     - models.model: We heritage Model from models to use the django ORM for creating the table 
-                    to use in this Email project
+                    to use in this Email project...
 
     id: Primary key.
     recipient_email: The email address of the recipient to whom the email is sent.
@@ -19,7 +19,7 @@ class Emails (models.Model):
     recipient_email = models.CharField(max_length=255)
     sender_email = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
-    body = models.TextField()
+    body = models.TextField()  
     timestamp = models.DateTimeField(auto_now_add=True)
 
     #name
