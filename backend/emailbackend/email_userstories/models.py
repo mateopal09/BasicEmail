@@ -6,8 +6,10 @@ class MyUserManager(BaseUserManager):
     """
     User manager
 
+    It handles how define and create the objects of the User. 
+
     Methods:
-    - Create_user: It will create the user
+    - Create_user: It will create the user. If it doesn't have the email field fill, it will return an Error
     """
 
     def create_user(self, email, password=None):
@@ -37,6 +39,8 @@ class User(AbstractBaseUser):
     """
     User
 
+    It heritage of AbstractBaseUser to handle the authentication and manage of the sessions
+
     Attributes:
     - Email: Email
     - name : user name
@@ -54,20 +58,6 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
 
-# class User(models.Model):
-#     """
-#     Users Profile
-
-#     Name: Charfield with max_length 255
-#     email: EmailField
-#     password: Charfield with max_length 255
-#     photo_profile: ImageField blank and null True
-#     """
-#     name = models.CharField(max_length=255)
-#     email = models.EmailField()
-#     password = models.CharField(max_length=255)
-#     photo_profile = models.ImageField(blank=True, null=True)
-
 class Emails(models.Model):
     """
     Emails
@@ -76,16 +66,11 @@ class Emails(models.Model):
     - models.model: We heritage Model from models to use the django ORM for creating the table 
                     to use in this Email project
 
-    id: Primary key.
-    recipient_id = The recipient id is where I send the email
-    sender_id = Who sent the email
-    recipient_email: The email address of the recipient to whom the email is sent.
-    sender_email: The email address of the sender who sent the email.
+    recipient = The recipient id is where I send the email
+    sender = Who sent the email
     subject: The subject of the email.
     body: The main text content of the email.
     timestamp: The date and time when the email was sent or received.
-    name: The name of the user. Null is for the db to be null, and in the form is for being blank=True the space, It means don't require
-    profile_picture: It will store an image of the user, and it is not required
     """
     recipient = models.ForeignKey(User, related_name='received_emails', on_delete=models.CASCADE)
     sender = models.ForeignKey(User, related_name='sender_email', on_delete=models.CASCADE)

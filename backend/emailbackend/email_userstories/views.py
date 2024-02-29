@@ -1,89 +1,130 @@
 #Backend
-from .models import Emails, User
+from .models import Emails
 from .serializers import EmailSendSerializer, EmailRecieveSerializer, RegisterUserSerializer, LoginUserSerializer
 
 #django
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
 
-#django rest framework
+
+#rest-framework
 from rest_framework import status, generics, mixins
 from rest_framework.response import Response
-from rest_framework.views import APIView
+
 
 
 class RegisterUserView(generics.CreateAPIView):
     """
     Register View
 
-    This will register a user with name, email, password and photoprofile
+    This view handles the registration of a new user. It accepts a POST request containing user data,
+    validates this data using the RegisterUserSerializer, and then saves the new user to the database.
+
+    Attributes:
+        - serializer_class: The serializer class for this view will use to validate and deserialize input, and to serialize output.
 
     Methods:
-    - Post: Return a status code 201 if it's created
+        - Post(request): Handles a POST request. It creates a new serializer with the data from the request, 
+          validates the data, and then saves the validated data as a new user in the database.
     """
     #Specify the serializer class
     serializer_class = RegisterUserSerializer
 
     def post(self, request):
         """
-        Post
+        Post from a request.
 
         Parameters:
-
-        - Request: Request with the data sent from post method
+        - request: the request.data should contain the user data to be validated and saved
         
-        Return Serializer with data, 201 status code  
+        Return:
+            - A Response object  with the serialized data of the newly created user and a status code indicating the success of the operation.
+              If the operation was succesful, the status code will be 201 CREATED.
         """
         #Save the data of serializer
         serializer = self.get_serializer(data=request.data)
-        #Check if serializer has a data if not return a error
+        #Validate the data. if the data is invalid, a 400 BAD REQUEST respoonse will be raised
         serializer.is_valid(raise_exception=True)
-        #If serializer has data it store that data
+        #If serializer has data it store that data in the database
         self.perform_create(serializer)
         #Headers will have the data saved
         headers = self.get_success_headers(serializer.data)
+        # Return a 201 CREATED response with the serialized data of the new user
         return Response (serializer.data, status=status.HTTP_201_CREATED, headers= headers)
     
 
 class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
     """
-    Login User View
+    LoginUserView
 
-    This will post an email and password to log in a user
+    This view handles the login process for a user. It accepts a POST request containing the user's email and password,
+    validates these credentials, and then logs in the user by storing their user ID in the session.
+
+    Attributes:
+        - serializer_class: The serializer class that this view will use to validate and deserialize input, 
+          and to serialize output.
 
     Methods:
-    - Post
+        - post(request, *args, **kwargs): Handles a POST request. It retrieves the email and password from the request data,
+          attempts to retrieve a user with the given email, checks if the password is correct, and then logs in the user by
+          storing their user ID in the session.
+        - get(request): Handles a GET request. It retrieves the user ID from the session, attempts to retrieve a user with
+          the given user ID, and then returns a response with the serialized data of the user and their received emails.
     """
+    #The serialize class will be LoginUserSerializer 
     serializer_class = LoginUserSerializer
 
     def post(self, request, *args, **kwargs):
         """
-        Post
+        Handles a POST request.
 
-        Return the user 
+        Parameters:
+            - request: The request that triggered this method. The request.data should contain the user's email and password.
+
+        Returns:
+            - A Response object with a message indicating the success or failure of the login process, and the serialized data
+              of the user if the login was successful. If the login was successful, the status code will be 200 OK. If the login
+              failed, the status code will be 404 NOT FOUND.
         """
         
         email = request.data.get('email')
         password = request.data.get('password')
         User = get_user_model()
 
+        #Validate if the email exist or no.
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             user = None
 
+        #If the user exist and password of the user.password is equal so it will access to that account
         if user is not None and user.password == password:
+            #The session will be the user in this case with he email and its ID
             request.session['user'] = user.id
+            #It will response a message with the data serialized and a status code
             return Response({"detail": "User logged in successfully", 'user': LoginUserSerializer(user).data}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid Credentials"}, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request):
+        """
+        Handles a GET request.
+
+        Parameters:
+            - request: The request that triggered this method.
+
+        Returns:
+            - A Response object with the serialized data of the user and their received emails if a user is logged in. If no user
+              is logged in, the response will contain a message indicating this and the status code will be 400 BAD REQUEST. If the
+              user does not exist, the response will contain a message indicating this and the status code will be 404 NOT FOUND.
+        """
+        #Validate if the session of the user exist
         user_id = request.session.get('user')
         if user_id is None:
             return Response({"detail": "No user logged in"}, status=status.HTTP_400_BAD_REQUEST)
 
+        #This is the model to use
         User = get_user_model()
+        #Search the user in the database
         try:
             user = User.objects.get(id=user_id)
             user_data = LoginUserSerializer(user).data
@@ -93,6 +134,7 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
                 'user': user_data,
                 'received_emails': received_emails_data,
             })
+        #If user doesn't exist it response a 404 NOT FOUND
         except ObjectDoesNotExist:
             return Response({"detail": "User not found in get"}, status=status.HTTP_404_NOT_FOUND)
         
@@ -101,90 +143,88 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
 
 class SendEmailView(generics.CreateAPIView):
     """
-    Send Email View
+    SendEmailView
 
-    This class will send an Email
+    This view handles the process of sending an email. It accepts a POST request containing the recipient's email, 
+    subject, and body of the email, validates these inputs, and then creates a new email in the database.
 
-    Methods.
-    - Post: Post a email
+    Attributes:
+        - serializer_class: The serializer class that this view will use to validate and deserialize input, 
+          and to serialize output.
+
+    Methods:
+        - create(request, *args, **kwargs): Handles a POST request. It retrieves the sender from the session, 
+          the recipient, subject, and body from the request data, creates a new email with these data, and then 
+          saves the new email to the database.
     """
     serializer_class = EmailSendSerializer
 
     def create(self, request, *args, **kwargs):
         """
-        Post
+        Handles a POST request.
 
         Parameters:
-        - request: It will have the data to send
-        - format=None: Django will determine the format of input data
+            - request: The request that triggered this method. The request.data should contain the recipient's email, 
+              subject, and body of the email.
 
-        This will save an instance of the serializer for the data request it
-        Then if serializer has a data it will save it, and with a status code 200
-        If not it will return 400 status code
+        Returns:
+            - A Response object with a message indicating the success of the email sending process, and a status code 
+              indicating the success of the operation. If the operation was successful, the status code will be 201 CREATED.
         """
+        #Validate if user session is ongoing 
         user_id = request.session.get('user')
         if user_id is None:
             return Response({"detail":"No user logged in. Please log in to send an email."}, status=status.HTTP_400_BAD_REQUEST)
 
+        #Validate if the user_id has email
         try:
             sender = get_user_model().objects.get(id=user_id)
         except get_user_model().DoesNotExist:
-            return Response({"detail":"User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail":"Sender not logged in"}, status=status.HTTP_404_NOT_FOUND)
 
-        recipient_email = request.data.get('recipient_email')  # El correo electrónico del destinatario
-        if recipient_email is None:
+        #Validate the recipient email from the request
+        recipient_id = request.data.get('recipient_email') 
+        if recipient_id is None:
             return Response({"detail":"Recipient email is required."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            recipient = get_user_model().objects.get(email=recipient_email)
+            recipient = get_user_model().objects.get(email=recipient_id)
         except get_user_model().DoesNotExist:
             return Response({"detail":"Recipient not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        #Data to deserialize and save in the data base
+        subject = request.data.get('subject')
+        body = request.data.get('body')
+        email = Emails.objects.create(sender=sender, recipient=recipient, subject=subject, body=body)
+        email. save()
+        return Response({'detail': ' Email sent succesfully'}, status=status.HTTP_201_CREATED)
 
-        data = request.data.copy()
-        data['sender'] = sender.id
-        data['recipient'] = recipient.id
-        serializer = EmailSendSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-
-            # Envía un correo electrónico
-            send_mail(
-                subject=serializer.validated_data['subject'],
-                message=serializer.validated_data['body'],
-                from_email=sender.email,
-                recipient_list=[recipient.email],
-                fail_silently=False,
-            )
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RecievedEmailView(generics.ListAPIView):
     """
-    Email Recieved View
+    ReceivedEmailView
 
-    This class received an email sent
+    This view handles the process of retrieving the emails received by the logged-in user. It accepts a GET request, 
+    retrieves the user from the session, and then retrieves all emails where the recipient is the user.
 
-    Methods get
+    Attributes:
+        - serializer_class: The serializer class that this view will use to serialize output.
+
+    Methods:
+        - get_queryset(): Retrieves the queryset that should be used for list views, and that should be used as the 
+          base for lookups in detail views. In this case, it retrieves all emails where the recipient is the user.
     """
     serializer_class = EmailRecieveSerializer
     def get_queryset(self):
         """
-        get
+        Retrieves the queryset of emails received by the logged-in user.
 
-        Parameters: 
-        - request: Don't use it for now, just for convention
-        - sender_email: Email of the sender
-        - format=None: Django will determine the format of the input data
-
-        This will look for the email of the sender, input with sender_email.
-        Then if it exists, It will go for the model and look for the information,
-        If it exists, will return the information, if not will return 404 status code with description.
+        Returns:
+            - A queryset of Emails objects where the recipient is the logged-in user.
         
         """
-    
+        #Valide if user session is ongoing
         user_id = self.request.session.get('user')
         if user_id is None:
             return Response({"detail":"No user logged in. Please log in to view received emails."}, status=status.HTTP_400_BAD_REQUEST)
-
+        #Return the emails it has from someone
         return Emails.objects.filter(recipient_id=user_id)
