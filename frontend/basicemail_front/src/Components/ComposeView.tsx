@@ -1,18 +1,19 @@
 import React from 'react'
 import Message from './Message'
-import {sendEmail} from '../api'
-import { set, useForm } from 'react-hook-form'
+import {postEmail} from '../api'
+import { useForm } from 'react-hook-form'
 import { useContext } from 'react'
 import { ActualViewContext } from '../Contexts/ViewContext'
 
 export default function ComposeView() {
 
-  const { register, handleSubmit } = useForm()
   const { setActualView } = useContext(ActualViewContext) 
+
+  const { register, handleSubmit } = useForm()
   const onSubmit = handleSubmit(
     async data => {
       try {
-        await sendEmail(data.subject, data.email, data.body)
+        await postEmail(data.subject, data.email, data.body)
         alert('Email sent')
         setActualView('Inbox')
       } catch (error) {

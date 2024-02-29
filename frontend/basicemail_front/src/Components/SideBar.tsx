@@ -3,11 +3,13 @@ import InboxIcon from '../Icons/InboxIcon'
 import ComposeIcon from '../Icons/ComposeIcon'
 import logo from '../Icons/logo.svg';
 import { ActualViewContext } from '../Contexts/ViewContext';
+import { userContext } from '../Contexts/UserContext';
 
 function SideBar() {
 
   const { actualView, setActualView } = useContext(ActualViewContext);
-  
+  const { actualUser } = useContext(userContext);
+
   return (
     <section className='
       w-1/3 
@@ -18,8 +20,8 @@ function SideBar() {
       p-6'>
         <div className='h-[90%]'>
           <button className='bg-white flex gap-2 rounded-2xl mb-[42px] px-3 py-2 items-center w-full'>
-            <img className='h-[50px] rounded-full' src="https://media.licdn.com/dms/image/D4E03AQGykjGV4y553w/profile-displayphoto-shrink_400_400/0/1703073087373?e=1714003200&v=beta&t=h6W18pmmsFNn6PpsXHiXOsTut6aA3QVNP-hZ_0EYT3I" alt="profile picture" />
-            <p className='text-base'>Sergio Franco</p>
+            <img className='h-[50px] rounded-full' src={actualUser.picture} alt="profile picture" />
+            <p className='text-base'>{actualUser.name}</p>
           </button>
 
           <div className='gap-2 flex flex-col'>
