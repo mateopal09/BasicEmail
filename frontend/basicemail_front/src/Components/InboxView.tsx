@@ -1,29 +1,25 @@
 import { useState, useEffect, useContext } from 'react'
 import Message from './Message'
-import { getEmails } from '../api';
+import { getEmails, getPicture } from '../api';
 import { selectedEmailContext } from '../Contexts/SelectedEmailContext';
+import { userContext } from '../Contexts/UserContext';
 import EmailIcon from '../Icons/EmailIcon';
 
 export default function InboxView() {
 
     const [emails, setEmails] = useState([]);
-    const falseEmails = [{"subject": "Subject1", "email": "email1@swiftmail.com", "body": "body1", "timestamp": "1:46PM 12/12/2021"},
-                        {"subject": "Subject2", "email": "email2@swiftmail.com", "body": "body2", "timestamp": "12:46PM 12/12/2021"},
-                        {"subject": "Subject3", "email": "email3@swiftmail.com", "body": "body3", "timestamp": "12:46PM 12/12/2021"},
-                        {"subject": "Subject4", "email": "email4@swiftmail.com", "body": "body4", "timestamp": "11:46PM 12/12/2021"},
-                        {"subject": "Subject5", "email": "email5@swiftmail.com", "body": "body5", "timestamp": "10:46PM 12/12/2021"},
-                        {"subject": "Subject6", "email": "email6@swiftmail.com", "body": "body6", "timestamp": "9:46PM 12/12/2021"}]
-
-    const { actualEmail, setActualEmail } = useContext(selectedEmailContext);
+    const { actualEmail } = useContext(selectedEmailContext);
+    const { actualUser } = useContext(userContext);
 
     async function getEmailsEffect() {
-        const data = await getEmails("remitente@example.com");
+        const data = await getEmails(actualUser.email);
         setEmails(data.data);
     }
 
     useEffect(() => {
-        getEmailsEffect();
-        console.log(emails)
+        //getEmailsEffect();
+        //console.log(emails)
+        //alert(actualUser.picture)
     }, []);
 
     return (
