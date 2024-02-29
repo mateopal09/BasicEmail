@@ -83,14 +83,15 @@ WSGI_APPLICATION = 'emailbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'basicemail',
+        'NAME': 'BasicEmail',
         'USER': 'mateo',
         'PASSWORD': '123456',
-        'HOST': 'host.docker.internal',
+        'HOST': 'localhost',
         'PORT': '5432'
     }
 }
 
+AUTH_USER_MODEL = 'email_userstories.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -109,6 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
 
 
 # Internationalization
