@@ -27,7 +27,8 @@ DEBUG = True
 
 #18.226.28.243 - Backend
 #52.14.205.166 - Frontend
-ALLOWED_HOSTS = ['18.226.28.243', '52.14.205.166']
+# 54.207.91.204 - Frontend Sao Paulo
+ALLOWED_HOSTS = ['18.226.28.243', '52.14.205.166', '54.207.91.204']
 
 
 # Application definition
@@ -59,6 +60,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://52.14.205.166:3000",
+    "http://54.207.91.204:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
