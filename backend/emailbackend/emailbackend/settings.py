@@ -26,9 +26,10 @@ SECRET_KEY = 'django-insecure-$-l1g8*8pq!se$4er@z16_odj)(7vhs0n8+3lc(%6_81#9fu&(
 DEBUG = True
 
 #18.226.28.243 - Backend
+# 18.228.223.130 - Backend Sao Paulo
 #52.14.205.166 - Frontend
 # 54.207.91.204 - Frontend Sao Paulo
-ALLOWED_HOSTS = ['18.226.28.243', '52.14.205.166', '54.207.91.204']
+ALLOWED_HOSTS = ['18.226.28.243', '52.14.205.166', '54.207.91.204', '18.228.223.130']
 
 
 # Application definition
