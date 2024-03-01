@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #rest-framework
 from rest_framework import status, generics, mixins
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 
 
 class RegisterUserView(generics.CreateAPIView):
@@ -117,6 +117,8 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
               is logged in, the response will contain a message indicating this and the status code will be 400 BAD REQUEST. If the
               user does not exist, the response will contain a message indicating this and the status code will be 404 NOT FOUND.
         """
+        print(request.session.items()) 
+        
         #Validate if the session of the user exist
         user_id = request.session.get('user')
         if user_id is None:
@@ -137,6 +139,33 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
         #If user doesn't exist it response a 404 NOT FOUND
         except ObjectDoesNotExist:
             return Response({"detail": "User not found in get"}, status=status.HTTP_404_NOT_FOUND)
+        
+class LogoutView(APIView):
+    def post(self, request):
+        """
+        Handles a POST request to log out the user.
+
+        Parameters:
+            - request: The request that triggered this method.
+
+        Returns:
+            - A Response object with a message indicating the success or failure of the logout process. If the logout was successful, the status code will be 200 OK. If the logout failed, the status code will be 400 BAD REQUEST.
+        """
+        # Validate if the session of the user exist
+        user_id = request.session.get('user')
+        if user_id is None:
+            return Response({"detail": "No user logged in"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # This is the model to use
+        User = get_user_model()
+        # Check if the user exists in the database
+        if User.objects.filter(id=user_id).exists():
+            # Delete the user session
+            del request.session['user']
+            return Response({"detail": "User logged out successfully"}, status=status.HTTP_200_OK)
+        # If user doesn't exist it response a 404 NOT FOUND
+        else:
+            return Response({"detail": "User not found in post"}, status=status.HTTP_404_NOT_FOUND)
         
 
 
@@ -183,7 +212,7 @@ class SendEmailView(generics.CreateAPIView):
             return Response({"detail":"Sender not logged in"}, status=status.HTTP_404_NOT_FOUND)
 
         #Validate the recipient email from the request
-        recipient_id = request.data.get('recipient_email') 
+        recipient_id = request.data.get('recipient_email')
         if recipient_id is None:
             return Response({"detail":"Recipient email is required."}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -201,7 +230,7 @@ class SendEmailView(generics.CreateAPIView):
 
 class RecievedEmailView(generics.ListAPIView):
     """
-    ReceivedEmailView
+    RecievedEmailView
 
     This view handles the process of retrieving the emails received by the logged-in user. It accepts a GET request, 
     retrieves the user from the session, and then retrieves all emails where the recipient is the user.
@@ -214,17 +243,36 @@ class RecievedEmailView(generics.ListAPIView):
           base for lookups in detail views. In this case, it retrieves all emails where the recipient is the user.
     """
     serializer_class = EmailRecieveSerializer
+
+    def list(self, request, *args, **kwargs):
+        """
+        Overrides the list method of the ListAPIView.
+
+        This method is called when a GET request is made. It checks if a user is logged in. If a user is logged in, 
+        it calls the list method of the superclass, otherwise it returns a 400 BAD REQUEST response.
+
+        Parameters:
+            - request: The request that triggered this method.
+
+        Returns:
+            - A Response object with a message indicating the success or failure of the logout process. If the logout was successful, the status code will be 200 OK. If the logout failed, the status code will be 400 BAD REQUEST.
+        """
+        # Check if a user session exists
+        user_id = request.session.get('user')
+        print(f'used id receive: {user_id}')
+        if user_id is None:
+            return Response({"detail":"No user logged in. Please log in to view received emails."}, status=status.HTTP_400_BAD_REQUEST)
+        # If a user session exists, call the list method of the superclass
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         """
         Retrieves the queryset of emails received by the logged-in user.
 
         Returns:
             - A queryset of Emails objects where the recipient is the logged-in user.
-        
         """
-        #Valide if user session is ongoing
+        # Get the user id from the session
         user_id = self.request.session.get('user')
-        if user_id is None:
-            return Response({"detail":"No user logged in. Please log in to view received emails."}, status=status.HTTP_400_BAD_REQUEST)
-        #Return the emails it has from someone
+        # Return the emails where the recipient is the user
         return Emails.objects.filter(recipient_id=user_id)

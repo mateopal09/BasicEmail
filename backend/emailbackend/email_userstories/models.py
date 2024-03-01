@@ -49,7 +49,7 @@ class User(AbstractBaseUser):
     #
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     name = models.CharField(max_length=255)
-    photo_profile = models.ImageField(blank=True, null=True)
+    photo_profile = models.URLField(blank=True, null=True)
 
     #Instance of MyUserManager to handle this model
     objects = MyUserManager()

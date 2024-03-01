@@ -25,17 +25,21 @@ export default function Login() {
     const onSubmit = handleSubmit(
         async data => {
             try {
-                const profileObject: ProfileProps = await getPicture().then((data) => data.data[Math.floor(Math.random() * 30)]);
                 if (isRegistration) {
-                    //alert('Here call the function to register the user')
+                    const profileObject: ProfileProps = await getPicture().then((data) => data.data[Math.floor(Math.random() * 30)]);
+                    await postUser(data.email, data.password, data.fullname, profileObject.download_url);
                     setActualUser({"email": data.email, "name": data.fullname, "picture": profileObject.download_url})
+                    localStorage.setItem('user', JSON.stringify({"email": data.email, "name": data.fullname, "picture": profileObject.download_url}));
                 } else {
-                    //alert('Here call the function to login the user')
-                    setActualUser({"email": data.email, "name": data.fullname, "picture": profileObject.download_url})
+                    const userPromise: any = await getUser(data.email, data.password);
+                    const userInfo: any = userPromise.data.user;
+                    console.log(userInfo)
+                    setActualUser({"email": userInfo.email, "name": userInfo.name, "picture": userInfo.photo_profile})
+                    localStorage.setItem('user', JSON.stringify({"email": userInfo.email, "name": userInfo.name, "picture": userInfo.photo_profile}));
                 }
                 navigate('/')
             } catch (error) {
-                console.error('Failed to login', error)
+                alert('Invalid credentials')
             }
         }
     )

@@ -1,14 +1,21 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import InboxIcon from '../Icons/InboxIcon'
 import ComposeIcon from '../Icons/ComposeIcon'
 import logo from '../Icons/logo.svg';
 import { ActualViewContext } from '../Contexts/ViewContext';
 import { userContext } from '../Contexts/UserContext';
+import LogoutIcon from '../Icons/LogoutIcon';
+import { useNavigate } from 'react-router-dom';
 
 function SideBar() {
 
   const { actualView, setActualView } = useContext(ActualViewContext);
-  const { actualUser } = useContext(userContext);
+  const { actualUser, setActualUser } = useContext(userContext);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log(actualUser);
+  }, []);
 
   return (
     <section className='
@@ -32,6 +39,11 @@ function SideBar() {
             <button onClick={() => setActualView("Compose")} className={`gap-2 flex ${actualView === "Compose" ? 'bg-[#5858B9] text-white' : 'bg-white hover:bg-[#dedede]'} rounded-lg px-3 items-center transition active:bg-[#5858B9]`}>
               <ComposeIcon/>
               <p className='text-base'>Compose</p>
+            </button>
+            <hr className='my-4' />
+            <button onClick={() => {setActualUser({"email": "no-selected@swiftmail.com", "name": "no-name", "picture": 'no-picure'}); navigate("/login")}} className={`gap-2 flex bg-white hover:bg-[#dedede] rounded-lg px-3 items-center transition active:bg-[#5858B9] active:text-white px-3`}>
+              <LogoutIcon/>
+              <p className='text-base'>Logout</p>
             </button>
           </div>
         </div>

@@ -12,12 +12,13 @@ export default function InboxView() {
     const { actualUser } = useContext(userContext);
 
     async function getEmailsEffect() {
+        console.log("ACTUAL USER EMAIL: " + actualUser.email)
         const data = await getEmails(actualUser.email);
         setEmails(data.data);
     }
 
     useEffect(() => {
-        //getEmailsEffect();
+        getEmailsEffect();
         //console.log(emails)
         //alert(actualUser.picture)
     }, []);

@@ -29,8 +29,10 @@ class EmailSendSerializer(serializers.ModelSerializer):
           obtiene el objeto User correspondiente y lo usa para crear el objeto Emails.
 
     """
-    recipient_email = serializers.ChoiceField(choices=[(user.email, user.email) for user in get_user_model().objects.all()])
-    
+    #recipient_email = serializers.ChoiceField(choices=[(user.email, user.email) for user in get_user_model().objects.all()])
+    recipient_email = serializers.CharField()
+
+
     class Meta:
         model = Emails
         fields = ['recipient_email','subject', 'body', 'timestamp']
@@ -71,7 +73,7 @@ class LoginUserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = User
-        fields = ['email', 'password']
+        fields = ['email', 'name' ,'password', 'photo_profile']
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     """
@@ -85,5 +87,5 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model= User
-        fields = ['name', 'email','password', 'photo_profile']
+        fields = ['name', 'email','password']
 
