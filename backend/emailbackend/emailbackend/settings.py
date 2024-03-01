@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$-l1g8*8pq!se$4er@z16_odj)(7vhs0n8+3lc(%6_81#9fu&(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.224.68.173']
 
 
 # Application definition
@@ -58,6 +58,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'emailbackend.urls'
@@ -84,13 +85,25 @@ WSGI_APPLICATION = 'emailbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'BasicEmail',
         'USER': 'mateo',
         'PASSWORD': '123456',
         'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}'''
+
+#AWS DATABASE
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'BasicEmail',
+        'USER': 'postgres',
+        'PASSWORD': 'basicemail123',
+        'HOST': 'basicemail.cpiawy0w4xz1.us-east-2.rds.amazonaws.com',
         'PORT': '5432'
     }
 }
