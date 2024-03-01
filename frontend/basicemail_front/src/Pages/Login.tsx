@@ -27,7 +27,7 @@ export default function Login() {
             try {
                 if (isRegistration) {
                     const profileObject: ProfileProps = await getPicture().then((data) => data.data[Math.floor(Math.random() * 30)]);
-                    await postUser(data.email, data.password, data.fullname, profileObject.download_url);
+                    await postUser(data.fullname, data.email, data.password, profileObject.download_url);
                     setActualUser({"email": data.email, "name": data.fullname, "picture": profileObject.download_url})
                     localStorage.setItem('user', JSON.stringify({"email": data.email, "name": data.fullname, "picture": profileObject.download_url}));
                 } else {

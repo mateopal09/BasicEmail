@@ -13,8 +13,8 @@ export const getUser = (email: string, password: string) => {
     return axios.post('http://localhost:8000/api/login/', { "email": email, "password": password }, {withCredentials: true});
 }
 
-export const postUser = (email: string, password: string, fullname: string, picture:string) => {
-    return axios.post('http://localhost:8000/api/register/', { "name": fullname, "email": email, "password": password, "photo_profile": picture}, {withCredentials: true});
+export const postUser = (name: string, email: string, password: string, photo_profile:string) => {
+    return axios.post('http://localhost:8000/api/register/', { "name": name, "email": email, "password": password, "photo_profile": photo_profile}, {withCredentials: true});
 }
 
 export const getPicture = () => {

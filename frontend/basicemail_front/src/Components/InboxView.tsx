@@ -19,8 +19,6 @@ export default function InboxView() {
 
     useEffect(() => {
         getEmailsEffect();
-        //console.log(emails)
-        //alert(actualUser.picture)
     }, []);
 
     return (
@@ -55,9 +53,9 @@ export default function InboxView() {
                     <h1 className='animate-[fadein_0.5s] h-[8%] font-semibold bg-white text-xl py-2 px-1 rounded-lg'>{actualEmail.subject}</h1>
 
                     <div className=' animate-[fadein_0.5s] h-[12%] bg-white text-xl py-2 px-1 rounded-lg gap-2 flex'>
-                        <img className='h-11 rounded-full' src="https://media.licdn.com/dms/image/D4E03AQGykjGV4y553w/profile-displayphoto-shrink_400_400/0/1703073087373?e=1714003200&v=beta&t=h6W18pmmsFNn6PpsXHiXOsTut6aA3QVNP-hZ_0EYT3I" alt="profile picture" />
+                        <img className='h-11 w-11 rounded-full' src={actualEmail.sender_photo} alt="profile picture" />
                         <div className='animate-[fadein_0.5s]'>
-                            <h1>Sergio Franco | <span className='text-xs'>{actualEmail.email}</span></h1>
+                            <h1>{actualEmail.sender_name} | <span className='text-xs'>{actualEmail.sender_email}</span></h1>
                             <p className='text-xs'>{actualEmail.timestamp}</p>
                         </div>
                     </div>

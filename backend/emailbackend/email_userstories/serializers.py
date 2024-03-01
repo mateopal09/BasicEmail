@@ -56,9 +56,26 @@ class EmailRecieveSerializer(serializers.ModelSerializer):
     - Meta.model = User class
     - Meta.field = The fields to serialize are email, name, password and photo_profile
     """
+    sender_name = serializers.SerializerMethodField()
+    sender_photo = serializers.SerializerMethodField()
+    sender_email = serializers.SerializerMethodField()
+
     class Meta:
         model = Emails
-        fields = ['sender_id', 'subject','body','timestamp']
+        fields = ['sender_id', 'sender_name', 'sender_email','sender_photo', 'subject','body','timestamp']
+
+    def get_sender_name(self, obj):
+        user = User.objects.get(id=obj.sender_id)
+        return user.name
+
+    def get_sender_email(self, obj):
+        user = User.objects.get(id=obj.sender_id)
+        return user.email
+        
+
+    def get_sender_photo(self, obj):
+        user = User.objects.get(id=obj.sender_id)
+        return user.photo_profile
 
 
 class LoginUserSerializer(serializers.ModelSerializer):
@@ -85,7 +102,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     - Meta.model = User
     - Meta.model = The fields to serialize are name, email,password, photo_profile
     """
+
     class Meta:
         model= User
-        fields = ['name', 'email','password']
+        fields = ['name', 'email','password','photo_profile']
 
+    

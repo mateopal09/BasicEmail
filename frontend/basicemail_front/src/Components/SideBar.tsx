@@ -27,7 +27,7 @@ function SideBar() {
       p-6'>
         <div className='h-[90%]'>
           <button className='bg-white flex gap-2 rounded-2xl mb-[42px] px-3 py-2 items-center w-full'>
-            <img className='h-[50px] rounded-full' src={actualUser.picture} alt="profile picture" />
+            <img className='h-[50px] w-[50px] rounded-full' src={actualUser.picture} alt="profile picture" />
             <p className='text-base'>{actualUser.name}</p>
           </button>
 

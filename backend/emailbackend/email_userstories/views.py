@@ -259,7 +259,6 @@ class RecievedEmailView(generics.ListAPIView):
         """
         # Check if a user session exists
         user_id = request.session.get('user')
-        print(f'used id receive: {user_id}')
         if user_id is None:
             return Response({"detail":"No user logged in. Please log in to view received emails."}, status=status.HTTP_400_BAD_REQUEST)
         # If a user session exists, call the list method of the superclass

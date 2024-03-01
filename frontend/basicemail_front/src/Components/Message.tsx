@@ -4,19 +4,22 @@ import { selectedEmailContext } from '../Contexts/SelectedEmailContext';
 
 
 interface MessageProps {
-  email: string;
+  sender_id: string,
+  sender_name: string,
+  sender_email: string;
+  sender_photo: string
   subject: string;
   body: string;
   timestamp: string;
 }
 
-export default function Message({subject, email, body, timestamp}: MessageProps) {
+export default function Message({sender_id, sender_name, sender_email, sender_photo, subject, body, timestamp}: MessageProps) {
 
   const [isSelected, setIsSelected] = React.useState(false);
   const { actualEmail, setActualEmail } = useContext(selectedEmailContext);
 
   function clickHandler() {
-    setActualEmail({subject, email, body, timestamp});
+    setActualEmail({sender_id, sender_name, sender_email, sender_photo, subject, body, timestamp});
   }
 
   useEffect(() => {
@@ -28,10 +31,11 @@ export default function Message({subject, email, body, timestamp}: MessageProps)
   }, [actualEmail]);
 
   return (
-    <button onClick={() => clickHandler()} className={`w-full flex items-center gap-2 animate-[leftappear_0.5s] transition p-3 rounded-xl ${isSelected ? 'bg-[#5858B9] hover:bg-[#5858B9]': 'bg-transparent hover:bg-[#dedede] hover:text-black'}`}>
-        <img className='h-11 rounded-full' src="https://media.licdn.com/dms/image/D4E03AQGykjGV4y553w/profile-displayphoto-shrink_400_400/0/1703073087373?e=1714003200&v=beta&t=h6W18pmmsFNn6PpsXHiXOsTut6aA3QVNP-hZ_0EYT3I" alt="profile picture" />
-        <div>
-            <h1 className='text-base font-bold'>Sergio Franco <span className='text-[10px] font-normal'>{timestamp}</span></h1>
+    <button onClick={() => clickHandler()} className={`w-full flex items-left gap-2 animate-[leftappear_0.5s] transition p-3 rounded-xl ${isSelected ? 'bg-[#5858B9] hover:bg-[#5858B9]': 'bg-transparent hover:bg-[#dedede] hover:text-black'}`}>
+        <img className='h-11 w-11 rounded-full' src={sender_photo} alt="profile picture" />
+        <div className='text-center'>
+            <h1 className='text-base font-bold text-left'>{sender_name}</h1>
+            <span className='text-[10px] font-normal'>{timestamp}</span>
             <p className='text-sm text-left'>{subject}</p>
         </div>
     </button>
