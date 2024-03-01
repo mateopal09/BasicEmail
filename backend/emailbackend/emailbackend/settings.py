@@ -25,10 +25,11 @@ SECRET_KEY = 'django-insecure-$-l1g8*8pq!se$4er@z16_odj)(7vhs0n8+3lc(%6_81#9fu&(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#18.226.28.243 - Backend stopped
-# 18.228.223.130 - Backend Sao Paulo
-#52.14.205.166 - Frontend stopped
 # 54.207.91.204 - Frontend Sao Paulo
+# 18.228.223.130 - Backend Sao Paulo
+#18.226.28.243 - Backend stopped
+#52.14.205.166 - Frontend stopped
+
 ALLOWED_HOSTS = ['54.207.91.204', '18.228.223.130']
 
 
@@ -60,7 +61,8 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://54.207.91.204:3000",
+    'http://54.207.91.204:3000',
+    'http://18.228.223.130:8000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
