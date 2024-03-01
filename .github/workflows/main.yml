@@ -21,7 +21,7 @@ jobs:
     - name: Build the django Docker image
       run: |
         cd backend/emailbackend
-        docker build -t basic_email1 .
+        docker build -t basic_email1 -f Dockerfile.back .
     - name: Tag the image
       run: docker tag basic_email1:latest mateopal09/basic_email1:backend
     - name: List the docker images
