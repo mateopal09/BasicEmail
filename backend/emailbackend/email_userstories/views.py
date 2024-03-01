@@ -117,7 +117,6 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
               is logged in, the response will contain a message indicating this and the status code will be 400 BAD REQUEST. If the
               user does not exist, the response will contain a message indicating this and the status code will be 404 NOT FOUND.
         """
-        print(request.session.items()) 
         
         #Validate if the session of the user exist
         user_id = request.session.get('user')
@@ -202,6 +201,7 @@ class SendEmailView(generics.CreateAPIView):
         """
         #Validate if user session is ongoing 
         user_id = request.session.get('user')
+        print(f'send email user id: {user_id}')
         if user_id is None:
             return Response({"detail":"No user logged in. Please log in to send an email."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -259,6 +259,7 @@ class RecievedEmailView(generics.ListAPIView):
         """
         # Check if a user session exists
         user_id = request.session.get('user')
+        print(f'user_id receive email: {user_id}')
         if user_id is None:
             return Response({"detail":"No user logged in. Please log in to view received emails."}, status=status.HTTP_400_BAD_REQUEST)
         # If a user session exists, call the list method of the superclass
