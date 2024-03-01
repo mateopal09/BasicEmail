@@ -25,11 +25,11 @@ SECRET_KEY = 'django-insecure-$-l1g8*8pq!se$4er@z16_odj)(7vhs0n8+3lc(%6_81#9fu&(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#18.226.28.243 - Backend
+#18.226.28.243 - Backend stopped
 # 18.228.223.130 - Backend Sao Paulo
-#52.14.205.166 - Frontend
+#52.14.205.166 - Frontend stopped
 # 54.207.91.204 - Frontend Sao Paulo
-ALLOWED_HOSTS = ['18.226.28.243', '52.14.205.166', '54.207.91.204', '18.228.223.130']
+ALLOWED_HOSTS = ['54.207.91.204', '18.228.223.130']
 
 
 # Application definition
@@ -60,7 +60,6 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://52.14.205.166:3000",
     "http://54.207.91.204:3000",
 ]
 
@@ -89,17 +88,6 @@ WSGI_APPLICATION = 'emailbackend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'BasicEmail',
-        'USER': 'mateo',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
-}'''
 
 #AWS DATABASE
 DATABASES = {
