@@ -1,75 +1,33 @@
-name: BasicEmail CI
+name: Docker Image CI
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  django-build:
+
+  build:
 
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.9, 3.10]
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-    - name: Install Dependencies
+    - name: Login Dockerhub
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      
+    - name: Build the django Docker image
       run: |
-        python3 -m pip install --upgrade pip
-        pip install -r backend/emailbackend/requirements.txt
-    - name: Run Tests
+        cd backend/emailbackend
+        docker build -t basic_email1 .
+    - name: Tag the image
+      run: docker tag basic_email1:latest mateopal09/basic_email1:backend
+    - name: List the docker images
+      run: docker images
+    - name: Push to dockerhub
       run: |
-        python3 backend/emailbackend/manage.py test
-
-  node-build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: frontend/basicemail_front/package-lock.json
-
-    - name: Move to package.json and install dependencies
-      run: |
-        cd frontend/basicemail_front
-        npm ci
-    # - name: Build project
-    #  run: |
-    #    cd frontend/basicemail_front
-    #    npm run build --if-present
-    # - run: npm test
-
-  production-branch-job:
-    needs: [django-build, node-build]
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Set Git configuration
-      run: |
-        git config user.name "${{ github.actor }}"
-
-    - name: Create or update production branch
-      run: |
-        git checkout -b production
-        git push origin production
-  
+        echo "Docker login successful. Pushing the image..."
+        docker push mateopal09/basic_email1
+        echo "Image pushed successfully."
