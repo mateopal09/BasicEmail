@@ -70,6 +70,6 @@ jobs:
 
     - name: Create or update production branch
       run: |
-        git checkout -B production
+        git checkout -b production
         git push origin production
   
