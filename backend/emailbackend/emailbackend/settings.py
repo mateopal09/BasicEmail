@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-$-l1g8*8pq!se$4er@z16_odj)(7vhs0n8+3lc(%6_81#9fu&(
 DEBUG = True
 
 # 54.207.91.204 - Frontend Sao Paulo
-# 18.228.223.130 - Backend Sao Paulo
-#18.226.28.243 - Backend stopped
-#52.14.205.166 - Frontend stopped
+# 18.231.121.164 - Backend Sao Paulo
 
-ALLOWED_HOSTS = ['54.207.91.204', '18.228.223.130']
+#'54.207.91.204'
+ALLOWED_HOSTS = ['18.231.121.164']
 
+# SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # Application definition
 
@@ -62,7 +63,6 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://54.207.91.204:3000',
-    'http://18.228.223.130:8000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True

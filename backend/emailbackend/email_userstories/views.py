@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 #rest-framework
-from rest_framework import status, generics, mixins
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -53,7 +53,7 @@ class RegisterUserView(generics.CreateAPIView):
         return Response (serializer.data, status=status.HTTP_201_CREATED, headers= headers)
     
 
-class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
+class LoginUserView(generics.GenericAPIView):
     """
     LoginUserView
 
@@ -74,7 +74,7 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
     #The serialize class will be LoginUserSerializer 
     serializer_class = LoginUserSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         """
         Handles a POST request.
 
@@ -89,6 +89,7 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
         
         email = request.data.get('email')
         password = request.data.get('password')
+        print(f'email log in {email}, password log in {password}')
         User = get_user_model()
 
         #Validate if the email exist or no.
@@ -99,8 +100,10 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
 
         #If the user exist and password of the user.password is equal so it will access to that account
         if user is not None and user.password == password:
-            #The session will be the user in this case with he email and its ID
+            #The session will be the user in this case with his email and its ID
             request.session['user'] = user.id
+            print("Session in login" , request.session['user'])
+            
             #It will response a message with the data serialized and a status code
             return Response({"detail": "User logged in successfully", 'user': LoginUserSerializer(user).data}, status=status.HTTP_200_OK)
         return Response({"detail": "Invalid Credentials"}, status=status.HTTP_404_NOT_FOUND)
@@ -120,6 +123,7 @@ class LoginUserView(mixins.CreateModelMixin, generics.GenericAPIView):
         
         #Validate if the session of the user exist
         user_id = request.session.get('user')
+        print(f"user id get of login: {user_id}")
         if user_id is None:
             return Response({"detail": "No user logged in"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -152,6 +156,7 @@ class LogoutView(APIView):
         """
         # Validate if the session of the user exist
         user_id = request.session.get('user')
+        print(f'user id logout {user_id}')
         if user_id is None:
             return Response({"detail": "No user logged in"}, status=status.HTTP_400_BAD_REQUEST)
 
