@@ -29,7 +29,7 @@ DEBUG = True
 # 18.231.121.164 - Backend Sao Paulo
 
 #'54.207.91.204'
-ALLOWED_HOSTS = ['18.231.121.164']
+ALLOWED_HOSTS = ['18.231.121.164', '54.207.91.204']
 
 # SESSION_SAVE_EVERY_REQUEST = True
 # SESSION_ENGINE = "django.contrib.sessions.backends.db"
