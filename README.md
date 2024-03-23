@@ -1,96 +1,57 @@
-# Final Design Plan
+# UPDATES EMAIL HOME GROUP 4
 
-This is the Design Plan for our Swift Email. We will provide a description of how we abstracted the project and solved it based on our technical skills and teamwork. For this project, we utilized HTTP's methods. To get or receive a message, we used the `GET` method, and to send a message, we used `POST`. Additionally, for the login process, we employed a `POST` method to save the new user information in the database and then a `GET` method to retrieve all information about this user, such as received emails.
+This document provides an overview of the updates to the Home Group 4 project made by Home Group 3. See [Frontend](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/front-email-g4-main/README.md), [Backend](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/back-email-g4-main/README.md) and [IAC](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/iac-email-g4-main/README.md) for more detailed updates and implementations.
 
-## Technologies and Frameworks
+## Frontend Changes Overview
 
-### Backend
+- Removed `.dockerignore` file, which included various Python, Git, and environment-specific files to ignore during Docker builds.
+- Added a new ESLint configuration file `.eslintrc.cjs` focusing on TypeScript and React rules.
+- Introduced Continuous Deployment (CD) and Continuous Integration (CI) pipelines with GitHub Actions, specified in `.github/workflows/cd.yml` and `.github/workflows/ci.yml`.
+- Updated the Docker configuration, introducing a multi-stage build in `Dockerfile` for optimizing the build process.
+- Added a `docker-compose.yml` file for defining and running multi-container Docker applications, setting up the project with specific ports and environment variables.
+- Configured Nginx for serving the application through a new `default.conf` file.
+- Updated `index.html` to serve as the entry point for the web application, including references to the main JavaScript file and the project's title.
+- Significant updates to `package.json`, including changes to project name, version, scripts, dependencies, and development dependencies.
+- Introduced `postcss.config.js` for PostCSS configuration, enabling plugins like Tailwind CSS and Autoprefixer.
+- Refactored code across various components (`ComposeView.tsx`, `InboxView.tsx`, `Message.tsx`, etc.) for improvements and removal of unused imports.
+- Adjustments in context files (`SelectedEmailContext.tsx`, `UserContext.tsx`, etc.) and icon components to clean up imports and code structure.
+- API configuration changes in `src/api.ts` to point to new backend endpoints.
+- File structure changes, including the renaming of `src/index.tsx` to `src/main.tsx` and addition of `src/vite-env.d.ts` for Vite-specific types.
+- Created a startup script `start.sh` for setting up environment variables and starting Nginx in Docker containers.
+- Updated Tailwind CSS configuration in `tailwind.config.js` for simplifying the setup.
+- Overhauled TypeScript configuration in `tsconfig.json` and added `tsconfig.node.json` for specific settings related to Node.js environments.
+- Introduced a Vite configuration file `vite.config.ts` for customizing the build process and integrating React with SWC.
 
-For the backend, we used Python with Django, and for the databases, PostgreSQL. The following APIs were created for the email service:
+## Backend Changes Overview
 
-- Get in the admin console of the PostgreSQL database. (`admin/`)
+- Code is modified `MyUserManager` class to encrypt the password.
+- The views are separated into a module with independent files as controllers.
+- The code that calls the actions in the database in the login and send_email.
+- Controller are organized into service modules.
+- The `service_send_email` code is simplified by validating the code with try and except
+- APIs are documented using swagger, modifying the project setting.
+- Changing the connection from postgres to mysql to a rds instance in AWS.
+- `Docker compose` is updated and the creation of the db is skipped
+- .env folder is created to hold sensitive keys
+- `python `decouple` is installed to manage the enviroments variables
+- `.dockerignore` is update with .env file
+- `Setting` update to add the new DNS and connections to the database located in AWS
 
-- Register the user. (`api/register/ [name='register']`)
+## IAC Implementation Overview
 
-- Login user to the email service. (`api/login/ [name='login']`)
+Infrastructure as Code (IAC) implementation with Terraform and Ansible offers numerous benefits for businesses, including streamlined deployment, enhanced performance, and cost savings. By automating infrastructure provisioning and management, organizations can achieve greater efficiency, scalability, and agility in their operations. Regular monitoring and optimization are essential for maximizing the effectiveness of the implemented solution and ensuring ongoing success.
 
-- Logout the user when they want to stop using the service. (`api/logout/ [name='logout']`)
+## C4 Diagram
+### Container diagram
 
-- Send an email from one user to another. (`api/send-email/ [name='send_email']`)
+![Container_diagram](./md-assets/diagram_g4_container.jpg)
 
-- Get the emails sent to the current user. (`api/receive-email/<str:email>/ [name='received_email']`)
+### Component diagram
 
-## Frontend
+![Container_diagram](./md-assets/diagram_g4_component.jpg)
 
-### Technologies and Frameworks
+## Summary
 
-- TypeScript
-- Jest
-- Axios
-- React
-
-In the frontend, we utilized TypeScript with React. The design was crafted based on the following color palette (specified with color codes).
-
-### Color Palette
-
-- Primary Color: `#5858B9`
-- Secondary Color: `#A459E1`
-- Accent Color: `#182468`
-
-![App color pallete](./md-assets/pallete.png)
-
-### User Interface Design
-
-The features implemented can be described as follows:
-
-#### Login 
-
-![App login](./md-assets/login.png)
-
-The user can login with their email address and password. That information will be verified so the user can use the service. If the user is not registered can do it clicking in the bottom “Don’t you have an account?”
-
-#### Register
-
-![App login](./md-assets/register.png)
-
-If the user does not have an existing account, they can create a new account providing data like Full Name, Email Adress and Password.
-
-#### Receive emails
-
-![App login](./md-assets/app.png)
-
-The main page of the service has two bottoms Inbox and Compose, the inbox bottom shows all the received emails so the user can see them.
-
-#### Compose email
-
-![App login](./md-assets/email.png)
-
-When a user wants to send an email, they can click on the Compose bottom and a form is shown. Then they fill the boxes Subject, Email and Body.
-
-## CI/CD, QA
-
-For CI/CD pipelines we decided to use Github Actions because of its facility to create a workflow and it is easy to deploy on AWS. Every time a push is made to the main branch of the repository two images of docker are created and uploaded to Docker Hub so the EC2 instances can run these images in its own containers.
-
-With GitHub Actions every time a push is made to the main branch. A series of tests run that evaluate the performance of backend and frontend, meaning the Django biuld, Node build and the production branch.
-
-### Deployment
-
-For the development of Swift Email two AWS services were used.
-
-#### RDS
-The Postgres databased is saved in an RDS. First was created locally and then all the information was migrated to the AWS service.
-
-#### EC2
-Two instances of this service were used for this project due the big necessity of resources power that were needed.
-
-  - An EC2 was used for the backend. It is running in the public IP 18.228.223.130 in the port 8000. The configuration for this EC2 is composed by a t2.micro, a storage of 8GiB and Ubuntu as the OS. Here its running a docker container with the image of the backend downloaded from the Docker Hub repository. It has Inbound rules that uses the TCP protocol to enable ports and the correct work of these instance, in this case the ports allowed are 8000, 443, 80, 22, 3000. All with 0.0.0.0/0 as the source, because we are interested that anybody can use it.
-
-  - An EC2 was used for the frontend. It is running in the public IP 54.207.91.204 in the port 3000. The configuration for this EC2 is composed by a t2.micro and a storage of 8GiB Ubuntu as the OS. Here its running a docker container with the image of the frontend downloaded from the Docker Hub repository. It has Inbound rules that uses the TCP protocol to enable ports and the correct work of these instance, in this case the ports allowed are 443, 80, 22, 3000. All with 0.0.0.0/0 as the source, because we are interested that anybody can use it.
-
-## Security
-
-With Github Actions we are going to use secrets, in this case for database access, AWS credentials and Docker Hub credentials.
-
-Also, the backend uses cookies so the user can be sure their information is not going to be shared with anyone.
-
-In fact, as this project is basic, we just put our efforts in the integration between the backend and frontend its CI/CD and deployment on AWS. So, we choose those options to learn as much as we can and to have an “email” functional and usable.
+- Frontend: The project has undergone significant updates, including the removal of certain files, introduction of new configurations for ESLint, Docker, Nginx, GitHub Actions CI/CD pipelines, and updates to package dependencies and scripts. Code refactoring was performed across various components and contexts to improve maintainability and performance. Additionally, the build and deployment processes have been optimized with the introduction of Vite and updated Docker configurations.
+- Backend: Relevant changes were made to some modules, finding a way to solve some important technical issues, as well as efforts to standardize some files and modules so that they could be read more easily.
+- IAC: As businesses grow and evolve, the demand for scalable, reliable, and efficient infrastructure becomes increasingly crucial. Manual infrastructure provisioning and configuration are prone to errors, inconsistencies, and inefficiencies. Therefore, automating these processes using IAC tools like Terraform and Ansible can significantly improve operational efficiency, reduce downtime, and enhance agility.
