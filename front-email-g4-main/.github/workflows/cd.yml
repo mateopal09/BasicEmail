@@ -1,0 +1,56 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Set short git commit SHA
+        id: commit
+        uses: prompt/actions-commit-hash@v3
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH connection
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+
+        run: |
+          ssh -o StrictHostKeyChecking=no -l ubuntu 54.202.119.143 <<EOF
+
+          IMAGE=\$(echo ghcr.io/\${{ github.repository }}:\${{ steps.commit.outputs.short }} | tr '[:upper:]' '[:lower:]')
+
+          # Stop and remove the running container
+
+          CONTAINER_ID=\$(sudo docker ps --filter "publish=80" -q)
+
+          echo "Stopping container \$CONTAINER_ID"
+
+          sudo docker stop \$CONTAINER_ID
+
+          echo "Removing unused Docker images..."
+
+          sudo docker image prune -a -f
+
+          # Pull the latest image
+
+          echo "Pulling image \$IMAGE"
+
+          sudo docker pull \$IMAGE
+
+          # Run the new container with environment variables
+          echo "Running container \$IMAGE"
+
+          sudo docker run -d -p 80:80 \$IMAGE
+
+          EOF
