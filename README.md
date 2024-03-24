@@ -72,6 +72,16 @@ Infrastructure as Code (IAC) implementation with Terraform and Ansible offers nu
 
 ![Container_diagram](./md-assets/diagram_g4_component.jpg)
 
+### Why this architecture?
+
+
+- Decoupling Frontend and Backend: By separating the frontend and backend concerns, you create a more modular architecture. This separation allows for easier maintenance and scalability because changes or updates to one part of the system are less likely to impact the other.
+- AWS: In the previous architecture, the project utilized two AWS EC2 instances to accommodate the size of the Docker images. Consequently, the previous team encountered difficulties deploying their Frontend and Backend services. Therefore, we opted to optimize the EC2 architecture by refining the Docker images of both the Backend and Frontend services. This optimization enabled us to streamline operations and utilize only a single AWS EC2 instance.
+- Efficient CI/CD Pipeline: Improvements in CI/CD processes and reduced Docker image sizes result in a more agile deployment pipeline. Faster deployments and smaller image sizes lead to faster iteration cycles and less downtime, ultimately improving overall system maintainability.
+- Improved Frontend Performance: Utilizing Vite for the front end improves performance due to its fast build times and hot module replacement. This allows for quicker development iterations and a smoother user experience. Additionally, optimizing React hooks can further enhance performance by reducing unnecessary re-renders and improving component efficiency.
+- Structured Backend Organization: The backend's transition from a monolithic structure to a more organized setup with models, routes, controllers and services enhances maintainability. Separating concerns into distinct components makes the codebase more readable, easier to debug, and simpler to extend or modify as requirements change.
+
+
 ## Summary
 
 - Frontend: The project has undergone significant updates, including the removal of certain files, introduction of new configurations for ESLint, Docker, Nginx, GitHub Actions CI/CD pipelines, and updates to package dependencies and scripts. Code refactoring was performed across various components and contexts to improve maintainability and performance. Additionally, the build and deployment processes have been optimized with the introduction of Vite and updated Docker configurations.
