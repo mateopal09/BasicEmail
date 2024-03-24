@@ -2,9 +2,21 @@
 
 This document provides an overview of the updates to the Home Group 4 project made by Home Group 3. See [Frontend](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/front-email-g4-main/README.md), [Backend](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/back-email-g4-main/README.md) and [IAC](https://github.com/G3-VER-TECH-FELLOWS/email-G4/blob/main/iac-email-g4-main/README.md) for more detailed updates and implementations.
 
+## Owners
+
+### Frontend Owners
+
+- Jacobo was chosen as the Front-End owner due to his expertise in architecture, coding best practices, and dockerization.
+- Miguel was chosen as the CI/CD Front-End owner due to his eagerness to learn this area, which was new to him.
+
+### Backend Owners
+- Daniel was chosen as the Back-End owner due to his critical knowledge of Django, which was essential for understanding the other team's code.
+- Miguel was chosen as the CI/CD Back-End owner due to his eagerness to learn this area, which was new to him.
+### IAC Owners
+
+- Daniel and Juan were selected as the IAC owners because of their eagerness to learn in this new area.
+
 ## Frontend Changes Overview
-
-
 
 - Removed `.dockerignore` file, which included various Python, Git, and environment-specific files to ignore during Docker builds.
 - Added a new ESLint configuration file `.eslintrc.cjs` focusing on TypeScript and React rules.
@@ -24,13 +36,6 @@ This document provides an overview of the updates to the Home Group 4 project ma
 - Overhauled TypeScript configuration in `tsconfig.json` and added `tsconfig.node.json` for specific settings related to Node.js environments.
 - Introduced a Vite configuration file `vite.config.ts` for customizing the build process and integrating React with SWC.
 
-### Frontend Owners
-
-- Jacobo was chosen as the Front-End owner due to his expertise in architecture, coding best practices, and dockerization.
-- Miguel was chosen as the CI/CD Front-End owner due to his eagerness to learn this area, which was new to him.
-
-
-
 ## Backend Changes Overview
 
 - Code is modified `MyUserManager` class to encrypt the password.
@@ -46,22 +51,9 @@ This document provides an overview of the updates to the Home Group 4 project ma
 - `.dockerignore` is update with .env file
 - `Setting` update to add the new DNS and connections to the database located in AWS
 
-### Backend Owners
-
-- Daniel was chosen as the Back-End owner due to his critical knowledge of Django, which was essential for understanding the other team's code.
-- Miguel was chosen as the CI/CD Back-End owner due to his eagerness to learn this area, which was new to him.
-
-
-
 ## IAC Implementation Overview
 
 Infrastructure as Code (IAC) implementation with Terraform and Ansible offers numerous benefits for businesses, including streamlined deployment, enhanced performance, and cost savings. By automating infrastructure provisioning and management, organizations can achieve greater efficiency, scalability, and agility in their operations. Regular monitoring and optimization are essential for maximizing the effectiveness of the implemented solution and ensuring ongoing success.
-
-### IAC Owners
-
-- Daniel and Juan were selected as the IAC owners because of their eagerness to learn in this new area.
-
-
 
 ## C4 Diagram
 ### Container diagram
@@ -74,13 +66,11 @@ Infrastructure as Code (IAC) implementation with Terraform and Ansible offers nu
 
 ### Why this architecture?
 
-
 - Decoupling Frontend and Backend: By separating the frontend and backend concerns, you create a more modular architecture. This separation allows for easier maintenance and scalability because changes or updates to one part of the system are less likely to impact the other.
 - AWS: In the previous architecture, the project utilized two AWS EC2 instances to accommodate the size of the Docker images. Consequently, the previous team encountered difficulties deploying their Frontend and Backend services. Therefore, we opted to optimize the EC2 architecture by refining the Docker images of both the Backend and Frontend services. This optimization enabled us to streamline operations and utilize only a single AWS EC2 instance.
 - Efficient CI/CD Pipeline: Improvements in CI/CD processes and reduced Docker image sizes result in a more agile deployment pipeline. Faster deployments and smaller image sizes lead to faster iteration cycles and less downtime, ultimately improving overall system maintainability.
 - Improved Frontend Performance: Utilizing Vite for the front end improves performance due to its fast build times and hot module replacement. This allows for quicker development iterations and a smoother user experience. Additionally, optimizing React hooks can further enhance performance by reducing unnecessary re-renders and improving component efficiency.
 - Structured Backend Organization: The backend's transition from a monolithic structure to a more organized setup with models, routes, controllers and services enhances maintainability. Separating concerns into distinct components makes the codebase more readable, easier to debug, and simpler to extend or modify as requirements change.
-
 
 ## Summary
 
