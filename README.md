@@ -4,6 +4,8 @@ This document provides an overview of the updates to the Home Group 4 project ma
 
 ## Frontend Changes Overview
 
+
+
 - Removed `.dockerignore` file, which included various Python, Git, and environment-specific files to ignore during Docker builds.
 - Added a new ESLint configuration file `.eslintrc.cjs` focusing on TypeScript and React rules.
 - Introduced Continuous Deployment (CD) and Continuous Integration (CI) pipelines with GitHub Actions, specified in `.github/workflows/cd.yml` and `.github/workflows/ci.yml`.
@@ -22,6 +24,13 @@ This document provides an overview of the updates to the Home Group 4 project ma
 - Overhauled TypeScript configuration in `tsconfig.json` and added `tsconfig.node.json` for specific settings related to Node.js environments.
 - Introduced a Vite configuration file `vite.config.ts` for customizing the build process and integrating React with SWC.
 
+### Frontend Owners
+
+- Jacobo was chosen as the Front-End owner due to his expertise in architecture, coding best practices, and dockerization.
+- Miguel was chosen as the CI/CD Front-End owner due to his eagerness to learn this area, which was new to him.
+
+
+
 ## Backend Changes Overview
 
 - Code is modified `MyUserManager` class to encrypt the password.
@@ -37,9 +46,22 @@ This document provides an overview of the updates to the Home Group 4 project ma
 - `.dockerignore` is update with .env file
 - `Setting` update to add the new DNS and connections to the database located in AWS
 
+### Backend Owners
+
+- Daniel was chosen as the Back-End owner due to his critical knowledge of Django, which was essential for understanding the other team's code.
+- Miguel was chosen as the CI/CD Back-End owner due to his eagerness to learn this area, which was new to him.
+
+
+
 ## IAC Implementation Overview
 
 Infrastructure as Code (IAC) implementation with Terraform and Ansible offers numerous benefits for businesses, including streamlined deployment, enhanced performance, and cost savings. By automating infrastructure provisioning and management, organizations can achieve greater efficiency, scalability, and agility in their operations. Regular monitoring and optimization are essential for maximizing the effectiveness of the implemented solution and ensuring ongoing success.
+
+### IAC Owners
+
+- Daniel and Juan were selected as the IAC owners because of their eagerness to learn in this new area.
+
+
 
 ## C4 Diagram
 ### Container diagram
